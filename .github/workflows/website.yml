@@ -18,10 +18,11 @@ jobs:
     outputs:
       sha: ${{ steps.source.outputs.sha }}
     steps:
-      # Only this repository's history: the selection reads no storytree file, so no submodule.
+      # Only this repository's history: the selection reads no storytree file, so no submodule. The
+      # repository is private, so publish-ci.mjs's fetch of main needs the read-only token kept; this job
+      # installs nothing.
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          persist-credentials: false
           ref: main
           fetch-depth: 0
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
@@ -84,9 +85,9 @@ jobs:
       WEBSITE_SERVICE_ACCOUNT: ${{ vars.WEBSITE_SERVICE_ACCOUNT }}
     steps:
       # The selected merge's history, for publish-ci.mjs to check main has no newer site inputs; no dependencies.
+      # The read-only token is kept for that fetch of the private repository, as in the source job.
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          persist-credentials: false
           ref: ${{ needs.source.outputs.sha }}
           fetch-depth: 0
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
