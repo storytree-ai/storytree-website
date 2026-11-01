@@ -25,6 +25,8 @@ The saved map is storytree's own plan and code (ADR-1171 D4): `pnpm refresh:fore
 storytree's library project and surveys the submodule's checkout (see FOREST.md). The first time on a machine, approve
 the submodule as storytree's checkout there: `storytree doctor --join storytree`, run in `storytree/`.
 
-Publishing to storytree.dev and storytree.dev/staging still runs from storytree's repository until ADR-1171 D3 step (3)
-moves it here, with the publication check (storytree's `packages/website/publish-ci.mjs` and `src/publish-source.ts`)
-rewritten for this layout.
+Publishing: each push to main that CI passes runs **Publish website** (`.github/workflows/website.yml`), which builds
+the site and uploads it to the here.now site behind storytree.dev and storytree.dev/staging, when anything but this
+repository's Markdown notes changed since the commit the live site names (`src/publish-source.ts`, contract 4.3). Its
+Google publishing identity is storytree's `infra/website-publish`; until the repository variables
+`WEBSITE_WIF_PROVIDER` and `WEBSITE_SERVICE_ACCOUNT` are set, the publish step says it skipped.

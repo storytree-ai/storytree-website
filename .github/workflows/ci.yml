@@ -1,7 +1,7 @@
 name: CI
 
 # The site's typecheck, tests and build, against storytree pinned as the submodule in storytree/ (ADR-1171 D2).
-# Publishing storytree.dev is not here yet: storytree's own repository publishes it until ADR-1171 D3 step (3).
+# Publishing follows this workflow: website.yml.
 on:
   pull_request:
     branches: [main]
