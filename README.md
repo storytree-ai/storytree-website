@@ -1,7 +1,7 @@
 # storytree.dev
 
 The website: its source (`src/`), tests (`src/**/*.test.*`), capture scripts (`testing/`, `shorts/`) and build. Its plan is
-the library project `storytree-website` (`.storytree.json`).
+the library project `storytree-website` (`.storytree/project.json`).
 
 It builds against storytree's own source, the git submodule in `storytree/`, pinned to a commit (ADR-1171). The pnpm
 workspace includes the storytree packages the site reaches (`pnpm-workspace.yaml`), and the site imports only what their
