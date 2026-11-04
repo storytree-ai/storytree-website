@@ -2,12 +2,25 @@ name: CI
 
 # The site's typecheck, tests and build, against storytree pinned as the submodule in storytree/ (ADR-1171 D2).
 # Publishing follows this workflow: website.yml.
+#
+# A pull request merges by CI when green, as storytree's do: `verify` passes only if `check` did, and branch
+# protection on main requires it; `automerge` then lands the pull request through land.yml, which reads whether it is
+# held when it runs (a draft, or the `hold` label) and merges only the commit `verify` passed. A draft is released by
+# `gh pr ready` (this workflow runs again and merges it when green); taking the `hold` label off releases a held one
+# (hold-release.yml). A pull request from a fork, or Dependabot's, is checked, never merged automatically.
 on:
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch:
+
+# A newer push to the same pull request, or to main, cancels the run it supersedes. A merge whose own run was
+# cancelled is still published: the publish reads what changed since the live site's commit (contract 4.3).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -34,3 +47,39 @@ jobs:
         env:
           WEBSITE_SITE: "1"
           WEBSITE_SHA: ${{ github.sha }}
+
+  # The check branch protection on main requires, and the one `automerge` waits for. It runs whatever `check` did
+  # (always()), so a failed or cancelled `check` fails it: were it skipped instead, GitHub would count it as passed.
+  verify:
+    name: verify
+    needs: check
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: The site's checks passed
+        env:
+          RESULT: ${{ needs.check.result }}
+        run: |
+          echo "check: $RESULT"
+          test "$RESULT" = success
+
+  # Lands the pull request once `verify` passed, through land.yml (see the header). Only this repository's own
+  # branches, never a fork's, and never Dependabot's: the owner merges those.
+  automerge:
+    name: automerge
+    needs: verify
+    if: >-
+      always() &&
+      needs.verify.result == 'success' &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
+    permissions:
+      actions: write # to start the publish workflow on main once merged
+      contents: write
+      pull-requests: write
+    uses: ./.github/workflows/land.yml
+    with:
+      pr: ${{ github.event.pull_request.number }}
+      sha: ${{ github.event.pull_request.head.sha }}

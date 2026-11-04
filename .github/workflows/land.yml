@@ -1,0 +1,71 @@
+name: Land
+
+# Merges a pull request whose `verify` passed on its head commit, as storytree's land.yml does with no merge queue
+# required. Two callers: ci.yml's `automerge`, once its own run's `verify` passed, and hold-release.yml, when the
+# `hold` label is taken off a pull request whose head had already passed `verify`. It merges nothing that is held when
+# it runs (a draft, or the `hold` label), and only the commit `verify` passed: never one pushed since.
+
+on:
+  workflow_call:
+    inputs:
+      pr:
+        description: The pull request's number.
+        type: number
+        required: true
+      sha:
+        description: The head commit `verify` passed; nothing else is merged.
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  land:
+    name: land
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      actions: write # to start the publish workflow on main once merged
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ inputs.pr }}
+      SHA: ${{ inputs.sha }}
+    steps:
+      # Whether it is held now, not in the event that started the run: a `hold` put on, or a pull request turned back
+      # into a draft, after the run began is not in that run's event (storytree's PR #704).
+      - name: Still held?
+        id: held
+        run: |
+          read -r state draft hold <<< "$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state,isDraft,labels \
+            --jq '"\(.state) \(.isDraft) \([.labels[].name] | index("hold") != null)"')"
+          held=false
+          if [ "$state" != OPEN ]; then held=true; echo "The pull request is $state: nothing to land."
+          elif [ "$draft" = true ]; then held=true; echo "A draft: not merged. \`gh pr ready\` releases it."
+          elif [ "$hold" = true ]; then held=true; echo "Carries the \`hold\` label: not merged. Removing the label releases it."
+          fi
+          echo "held=$held" >> "$GITHUB_OUTPUT"
+      # --match-head-commit: merge the commit `verify` passed, never one pushed since. --auto: if main's protection
+      # still holds the merge back (GitHub can take a few seconds to read the just-passed `verify`), GitHub's auto-merge
+      # makes it once it allows; otherwise gh merges now. --delete-branch: gh deletes the merged branch itself.
+      - name: Merge
+        id: merge
+        if: steps.held.outputs.held == 'false'
+        run: gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --auto --merge --match-head-commit "$SHA" --delete-branch
+      # A merge made with this workflow's token starts no push workflow, so neither CI on main nor the publish that
+      # follows it (website.yml) runs. Once the merge has happened, which GitHub finishes a few seconds after
+      # `gh pr merge` returns, this starts the publish on main, which builds, checks and publishes main's head (contract
+      # 4.3). It waits up to two minutes; a merge still held back after that publishes with the next change to main.
+      - name: Publish main
+        if: steps.merge.outcome == 'success'
+        run: |
+          for attempt in $(seq 1 24); do
+            if [ "$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state)" = MERGED ]; then
+              gh workflow run website.yml --repo "$GITHUB_REPOSITORY" --ref main
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Not merged after two minutes, so main has not changed yet: nothing to publish now."
