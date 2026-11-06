@@ -4,8 +4,9 @@ import type { TourSnapshot } from "./forest-data.js";
 
 /**
  * The saved map as one stage, grown the way the old home page's arrival grew it: the globe swells from a point of light, then
- * each island rises and each road draws on, in about twelve seconds; after it the map is free play. Each road draws at a typical
- * road's pace: measuring its true length means routing every road on the page's thread, seconds the canvas's worker spends anyway.
+ * each island rises, one that builds on another once that one's crossing has arrived, in about twelve seconds; after it the map
+ * is free play. No road draws at sea (lanes show only on a selection); the growth plan's crossings only time the islands' rise,
+ * each at a typical crossing's pace: measuring its true length means routing every lane on the page's thread.
  */
 export function arrivalGrowth(snapshot: Pick<TourSnapshot, "scene" | "capturedAt">, seconds = 12): GrowthPlan {
   return growthPlan([{ scene: snapshot.scene, at: snapshot.capturedAt }], { fromPoint: true, seconds });
