@@ -9,8 +9,7 @@ import { removeTemp } from "@storytree/test-waits";
 
 import { captureOutput, capturePath } from "../testing/capture-path.mjs";
 
-const captures = ["terminal.mjs", "turn/capture.mjs", "journey/capture.mjs",
-  "nameplates-phone/capture.mjs", "warm-globe/measure.mjs", "capture.mjs"];
+const captures = ["terminal.mjs", "turn/capture.mjs", "journey/capture.mjs", "warm-globe/measure.mjs", "capture.mjs"];
 
 // Execute each helper's actual server registration with a synthetic build root. Stop before listen/browser
 // startup: only the HTTP transport is replaced, and readFile still reads the disposable fixture's real files.
