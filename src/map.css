@@ -65,11 +65,19 @@ html:has(> body.immersive-home) { scroll-padding-top:0; }
 .map-record-browser :is(input, select) { width:100%; min-height:44px; font:14px/1.5 system-ui; padding:6px; border:1px solid var(--line, #485159); border-radius:5px; background:var(--bg, #17191c); color:var(--text, #e7e8ea); }
 /* The app's panels, inside the frame rather than the window. */
 .map-frame .story-panel { top:60px; bottom:12px; }
-.map-frame .sessions-list { bottom:0; max-height:30%; }
+/* The desktop's sessions list and arc board fill its left rail's tabs (ADR-1219); in the frame the list is a strip along the
+   bottom and the board a drawer from the Arcs bar along the top (2.36), over the map. */
+.map-frame .sessions-list { position:absolute; left:0; right:0; bottom:0; z-index:4; height:auto; max-height:30%; background:#12181bf0; border-top:1px solid #3d4748; box-shadow:0 -5px 20px #0004; }
+.map-frame .sessions-list .session-legend { flex-basis:auto; margin-left:auto; }
 .map-frame:has(.story-panel) .sessions-list { right:calc(min(30rem, 100% - 1.5rem) + 1.5rem); }
-.map-frame .arc-handle { position:absolute; top:0; height:48px; }
-.map-frame .arc-overlay { position:absolute; top:48px; z-index:60; bottom:0; height:auto; max-height:none; }
-.map-frame .arc-overlay .arc-handle { top:-48px; }
+.map-arcs-handle { position:absolute; top:0; left:0; right:0; z-index:6; display:flex; align-items:center; gap:14px; height:48px; padding:0 20px; border:0; border-bottom:1px solid #485159; background:#101418; color:#eceae3; font:14px/1.5 "Segoe UI", system-ui, sans-serif; text-align:left; cursor:pointer; }
+.map-arcs-handle:hover { background:#262a2f; }
+.map-arcs-handle:focus-visible { outline:2px solid #a9b0ba; outline-offset:-3px; }
+.map-arcs-label { font-weight:600; }
+.map-arcs-caret { margin-left:auto; color:#a9b0ba; }
+.map-arcs-drawer { position:absolute; top:48px; left:0; right:0; bottom:0; z-index:60; display:flex; flex-direction:column; background:var(--surface, #202622); border-bottom:1px solid var(--line, #43504d); box-shadow:0 12px 28px #0004; }
+.map-arcs-drawer[hidden] { display:none; }
+.map-arcs-drawer .arc-surface-mount { min-height:0; flex:1; }
 
 /* On touch the map is still until tapped (ADR-1091 D2): a layer over it takes the tap, and lets a thumb scroll the page. */
 .map-tap { position:absolute; inset:0; z-index:70; display:flex; align-items:center; justify-content:center; padding:0; border:0; background:linear-gradient(#0d111400, #0d111455); color:#f0f0e7; touch-action:pan-y pinch-zoom; cursor:pointer; }
@@ -92,7 +100,6 @@ html:has(> body.immersive-home) { scroll-padding-top:0; }
   .map-frame:has(.story-panel) .sessions-list { right:0; visibility:hidden; }
   .map-frame .sessions-list .session-legend { display:none; }
   .map-frame .sessions-list { max-height:26%; }
-  .map-frame .arc-panes { grid-template-columns:minmax(0,1fr); grid-template-rows:1fr 1fr; }
   .map-zoom { display:none; }
   .map-frame[data-hand="map"] .map-zoom { display:flex; }
 }

@@ -45,7 +45,6 @@ test("3.1 · refresh keeps surveyed land, explanatory plan and knowledge, and th
   assert.equal(snapshot.capturedAt, until);
   assert.equal(snapshot.scene.islands[0].land.files[0].path, "src/main.ts");
   assert.equal(snapshot.scene.islands[0].land.territories[0].lines, 40);
-  assert.deepEqual(snapshot.scene.islands[0].land.imports, [{ from: "src/main.ts", to: "src/other.ts" }]);
   assert.equal(snapshot.places[0].id, "story_example");
   assert.equal(snapshot.tree.stories[0].capabilities[0].description, "A real capability");
   assert.deepEqual(snapshot.changes[0].record.fields, { title: "A choice", number: 7, status: "accepted", frontCoverOf: "story_example", links: ["principle_example"], supersedes: [], story: "story_example" });

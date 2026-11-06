@@ -242,7 +242,7 @@ const runs = {
           return { labels: shown.map(node => ({ text: node.querySelector(".tour-tag-text")?.textContent, box: box(node.querySelector(".tour-tag-text")) })).filter(label => label.box),
             pointed: document.querySelector(".tour-session-surface")?.hasAttribute("data-pointed") ?? false,
             room: { width: innerWidth, height: innerHeight },
-            others: [["card", "#tour-card"], ["bar", "#tour-bar"], ["panel", ".story-panel"], ["sessions", ".tour-session-surface:not([hidden]) .sessions-list"], ["arcs", ".arc-overlay"], ["mini globe", "#website-forest .planet-mini-globe"]]
+            others: [["card", "#tour-card"], ["bar", "#tour-bar"], ["panel", ".story-panel"], ["sessions", ".tour-session-surface:not([hidden]) .sessions-list"], ["arcs", ".map-arcs-drawer"], ["mini globe", "#website-forest .planet-mini-globe"]]
               .map(([name, selector]) => [name, box(document.querySelector(selector))]).filter(([, found]) => found),
             names: [...document.querySelectorAll(".planet-nameplate[data-story-id]")].filter(node => getComputedStyle(node).opacity !== "0").map(node => [node.querySelector(".planet-nameplate-title")?.textContent, box(node.querySelector(".planet-nameplate-title"))]).filter(([, found]) => found) };
         });

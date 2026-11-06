@@ -6,10 +6,8 @@ packages:
   - storytree/packages/arc-surface
   - storytree/packages/base-dev-loop
   - storytree/packages/ci-health
-  - storytree/packages/dev-loop
   - storytree/packages/forest
   - storytree/packages/forest-world
-  - storytree/packages/guardrails
   - storytree/packages/keys
   - storytree/packages/knowledge-core
   - storytree/packages/library
@@ -18,7 +16,7 @@ packages:
   - storytree/packages/mark
   - storytree/packages/plugin-loader
   - storytree/packages/project-and-caller
-  - storytree/packages/quality-assurance
+  - storytree/packages/repo-checks
   - storytree/packages/session-management
   - storytree/packages/test-waits
 
@@ -43,3 +41,5 @@ ignoredBuiltDependencies:
   - koffi
   - onnxruntime-node
   - protobufjs
+  # The code survey loads its grammar's wasm as bytes; the native binding its script builds is never used.
+  - tree-sitter-python
