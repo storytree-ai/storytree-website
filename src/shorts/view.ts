@@ -47,8 +47,8 @@ const island = drawn as typeof drawn & { land: { territories: Part[] } };
 
 /** The saved shop as the short draws it: its own islands and links as saved, and the wishlist's island where the forest drew it,
  * with a link from each of its parts to what it builds on (a lane on a selection; no road crosses the sea, ADR-1261). */
-const builtOn = (scene.links ?? []).filter(link => mine.has(link.from));
-export const snapshot = { ...shop, scene: { islands: [...shop.scene.islands, island], links: [...(shop.scene.links ?? []), ...builtOn] },
+const roads = (scene.links ?? []).filter(link => mine.has(link.from));
+export const snapshot = { ...shop, scene: { islands: [...shop.scene.islands, island], links: [...(shop.scene.links ?? []), ...roads] },
   places: [...shop.places, { id: WISHLIST.story, title: WISHLIST.title, reported: "not-checked", place: WISHLIST.place, at: { x: 1.5, y: -2 }, dependsOn: [] }] };
 export const places = new Map(snapshot.places.map(place => [place.id, place.place]));
 const number = (title: string) => Number(/^(\d+)/.exec(title)?.[1] ?? Infinity);
