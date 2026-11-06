@@ -14,6 +14,7 @@ import type { TourSnapshot } from "./forest-data.js";
 import { recordedView, savedReading } from "./tour-reading.js";
 import { wireMapFrame } from "./map-frame.js";
 import { arrivalGrowth } from "./arrival-growth.js";
+import { mountArcsDrawer } from "./arcs-drawer.js";
 
 /** One session's wisp round one island, as the forest draws it: the site's own copy, whole, since it hands each one back (ADR-1017 D2). */
 type SessionWisp = { session: string; story: string; colour: string; faded: boolean; capabilities: string[] };
@@ -21,7 +22,7 @@ type SessionWisp = { session: string; story: string; colour: string; faded: bool
 const snapshot = saved as unknown as TourSnapshot;
 const places = new Map(snapshot.places.map(place => [place.id, place.place]));
 const notes = [...knowledge(snapshot.changes).notes.values()];
-const complete: GlobeSurfaces = { grounds: true, roads: true, nameplates: true, territories: "health", fileCircles: true, knowledgeCore: true, sessionTints: true };
+const complete: GlobeSurfaces = { grounds: true, roads: true, nameplates: true, territories: "health", knowledgeCore: true, sessionTints: true };
 /** The map's whole view: on the glass sheet, the view it opens on (forest 3.66). */
 const overview: GlobeTarget = { kind: "core" };
 /** The map frames itself in the glass sheet's ground units (the short half-side of the view); the sheet's camera takes them in its sphere's radii. */
@@ -99,8 +100,11 @@ function Sessions({ recording, core, onWisps, onHighlight }: { recording: Record
 function Arcs({ recording }: { recording: Recording }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const mounted = mountArcSurface(ref.current!, { project: snapshot.project, reads: recording.reads, timers: recording.timers, reading: recording.reading });
-    return () => mounted.stop();
+    // The board opens from the frame's Arcs bar (2.36).
+    return mountArcsDrawer(ref.current!, panel => {
+      const mounted = mountArcSurface(panel, { project: snapshot.project, reads: recording.reads, timers: recording.timers, reading: recording.reading });
+      return () => mounted.stop();
+    });
   }, [recording]);
   return <div ref={ref} className="map-arcs" />;
 }

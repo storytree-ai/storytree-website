@@ -63,12 +63,12 @@ importers:
       '@storytree/app-setup':
         specifier: workspace:*
         version: link:storytree/packages/app-setup
-      '@storytree/dev-loop':
-        specifier: workspace:*
-        version: link:storytree/packages/dev-loop
       '@storytree/local-postgres':
         specifier: workspace:*
         version: link:storytree/packages/local-postgres
+      '@storytree/repo-checks':
+        specifier: workspace:*
+        version: link:storytree/packages/repo-checks
       '@storytree/test-waits':
         specifier: workspace:*
         version: link:storytree/packages/test-waits
@@ -117,6 +117,9 @@ importers:
       '@storytree/map':
         specifier: workspace:*
         version: link:../map
+      '@storytree/plugin-loader':
+        specifier: workspace:*
+        version: link:../plugin-loader
       '@storytree/project-and-caller':
         specifier: workspace:*
         version: link:../project-and-caller
@@ -126,16 +129,13 @@ importers:
       posthog-node:
         specifier: 5.55.0
         version: 5.55.0
+      smol-toml:
+        specifier: 1.9.1
+        version: 1.9.1
       zod:
         specifier: ^4.6.5
         version: 4.6.5
     devDependencies:
-      '@storytree/plugin-loader':
-        specifier: workspace:*
-        version: link:../plugin-loader
-      '@storytree/quality-assurance':
-        specifier: workspace:*
-        version: link:../quality-assurance
       '@storytree/test-waits':
         specifier: workspace:*
         version: link:../test-waits
@@ -232,52 +232,6 @@ importers:
       typescript:
         specifier: ~7.0.2
         version: 7.0.2
-
-  storytree/packages/dev-loop:
-    dependencies:
-      '@storytree/base-dev-loop':
-        specifier: workspace:*
-        version: link:../base-dev-loop
-      '@storytree/ci-health':
-        specifier: workspace:*
-        version: link:../ci-health
-      '@storytree/forest':
-        specifier: workspace:*
-        version: link:../forest
-      '@storytree/guardrails':
-        specifier: workspace:*
-        version: link:../guardrails
-      '@storytree/library':
-        specifier: workspace:*
-        version: link:../library
-      '@storytree/local-postgres':
-        specifier: workspace:*
-        version: link:../local-postgres
-      '@storytree/map':
-        specifier: workspace:*
-        version: link:../map
-      '@storytree/plugin-loader':
-        specifier: workspace:*
-        version: link:../plugin-loader
-      '@storytree/project-and-caller':
-        specifier: workspace:*
-        version: link:../project-and-caller
-      '@storytree/session-management':
-        specifier: workspace:*
-        version: link:../session-management
-      pg:
-        specifier: ^8.23.0
-        version: 8.23.0
-      playwright-core:
-        specifier: 1.60.0
-        version: 1.60.0
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
-    devDependencies:
-      '@storytree/test-waits':
-        specifier: workspace:*
-        version: link:../test-waits
 
   storytree/packages/forest:
     dependencies:
@@ -388,28 +342,6 @@ importers:
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
-      typescript:
-        specifier: ~7.0.2
-        version: 7.0.2
-
-  storytree/packages/guardrails:
-    dependencies:
-      '@storytree/map':
-        specifier: workspace:*
-        version: link:../map
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
-    devDependencies:
-      '@storytree/library':
-        specifier: workspace:*
-        version: link:../library
-      '@storytree/test-waits':
-        specifier: workspace:*
-        version: link:../test-waits
-      '@types/node':
-        specifier: ^24.13.6
-        version: 24.13.6
       typescript:
         specifier: ~7.0.2
         version: 7.0.2
@@ -564,6 +496,15 @@ importers:
       '@babel/parser':
         specifier: ^7.29.9
         version: 7.29.9
+      smol-toml:
+        specifier: 1.9.1
+        version: 1.9.1
+      tree-sitter-python:
+        specifier: 0.25.0
+        version: 0.25.0
+      web-tree-sitter:
+        specifier: 0.27.1
+        version: 0.27.1
       zod:
         specifier: ^4.6.5
         version: 4.6.5
@@ -580,6 +521,9 @@ importers:
       '@types/node':
         specifier: ^24.13.6
         version: 24.13.6
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
@@ -608,12 +552,12 @@ importers:
         specifier: workspace:*
         version: link:../project-and-caller
     devDependencies:
+      '@storytree/test-waits':
+        specifier: workspace:*
+        version: link:../test-waits
       '@types/node':
         specifier: ^24.13.6
         version: 24.13.6
-      esbuild:
-        specifier: ^0.28.2
-        version: 0.28.2
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
@@ -661,14 +605,20 @@ importers:
         specifier: ~7.0.2
         version: 7.0.2
 
-  storytree/packages/quality-assurance:
+  storytree/packages/repo-checks:
     dependencies:
       '@babel/parser':
         specifier: ^7.29.9
         version: 7.29.9
-      '@storytree/guardrails':
+      '@storytree/base-dev-loop':
         specifier: workspace:*
-        version: link:../guardrails
+        version: link:../base-dev-loop
+      '@storytree/ci-health':
+        specifier: workspace:*
+        version: link:../ci-health
+      '@storytree/forest':
+        specifier: workspace:*
+        version: link:../forest
       '@storytree/library':
         specifier: workspace:*
         version: link:../library
@@ -678,31 +628,19 @@ importers:
       '@storytree/map':
         specifier: workspace:*
         version: link:../map
-      '@storytree/plugin-loader':
-        specifier: workspace:*
-        version: link:../plugin-loader
       '@storytree/project-and-caller':
         specifier: workspace:*
         version: link:../project-and-caller
-      '@storytree/session-management':
-        specifier: workspace:*
-        version: link:../session-management
-      zod:
-        specifier: ^4.6.5
-        version: 4.6.5
+      pg:
+        specifier: ^8.23.0
+        version: 8.23.0
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
     devDependencies:
       '@storytree/test-waits':
         specifier: workspace:*
         version: link:../test-waits
-      '@types/node':
-        specifier: ^24.13.6
-        version: 24.13.6
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
-      typescript:
-        specifier: ~7.0.2
-        version: 7.0.2
 
   storytree/packages/session-management:
     dependencies:
@@ -2633,6 +2571,10 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
+  node-addon-api@8.9.2:
+    resolution: {integrity: sha512-VijLXbi3UACN69I0JVXJsX4tjACjNoQDgv2gTF6sx2wWEi8tkSg2eX8p5gSIFi8z2+DL3oHmY6OyKce38SDolg==}
+    engines: {node: ^18 || ^20 || >= 21}
+
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
@@ -2641,6 +2583,10 @@ packages:
   node-fetch@3.3.2:
     resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  node-gyp-build@4.8.4:
+    resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
+    hasBin: true
 
   node-releases@2.0.58:
     resolution: {integrity: sha512-BdiKAgbfRlvfMq/XzO/AF9NPmaA8a+YpLAyAFTVFBj3gARrAIfWvNq7Q7NE4se3KgFu0KkrvQMxTS0XVnsGzHg==}
@@ -2934,6 +2880,10 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+  smol-toml@1.9.1:
+    resolution: {integrity: sha512-j7WyPdf0CJoutMzMoPLF/bVXHtKZIT9Rb4eGeEbWw8X2t5oirjPgpL+OpaENZrILYaXqYwnVH+qgUwVbl+pUJQ==}
+    engines: {node: '>= 18'}
+
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
     engines: {node: '>=0.10.0'}
@@ -3076,6 +3026,14 @@ packages:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
 
+  tree-sitter-python@0.25.0:
+    resolution: {integrity: sha512-eCmJx6zQa35GxaCtQD+wXHOhYqBxEL+bp71W/s3fcDMu06MrtzkVXR437dRrCrbrDbyLuUDJpAgycs7ncngLXw==}
+    peerDependencies:
+      tree-sitter: ^0.25.0
+    peerDependenciesMeta:
+      tree-sitter:
+        optional: true
+
   troika-three-text@0.52.5:
     resolution: {integrity: sha512-Ry3jRhic9pzcY4JduSvRRyDmVOSqEW19gT4vtK+aCiPNVcDlmkxvGG0YbFd36RTDq1wExOupXnvNF/j1oiHHDA==}
     peerDependencies:
@@ -3144,6 +3102,9 @@ packages:
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
+
+  web-tree-sitter@0.27.1:
+    resolution: {integrity: sha512-qtx0VyUyNRHtL3ze7+v0hCKB/sLcAmY7ZAVp/ZK/bCj0yED8ptvNrr7Vd7DwDyKDWN9baqcUx4uaD2r2ql+6IA==}
 
   webgl-constants@1.1.1:
     resolution: {integrity: sha512-LkBXKjU5r9vAW7Gcu3T5u+5cvSvh5WwINdr0C+9jpzVB41cjQAP5ePArDtk/WHYdVj0GefCgM73BA7FlIiNtdg==}
@@ -5000,6 +4961,8 @@ snapshots:
 
   neo-async@2.6.2: {}
 
+  node-addon-api@8.9.2: {}
+
   node-domexception@1.0.0: {}
 
   node-fetch@3.3.2:
@@ -5007,6 +4970,8 @@ snapshots:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
+
+  node-gyp-build@4.8.4: {}
 
   node-releases@2.0.58: {}
 
@@ -5305,6 +5270,8 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
+  smol-toml@1.9.1: {}
+
   source-map-js@1.2.2: {}
 
   source-map-support@0.5.21:
@@ -5407,6 +5374,11 @@ snapshots:
 
   to-fast-properties@2.0.0: {}
 
+  tree-sitter-python@0.25.0:
+    dependencies:
+      node-addon-api: 8.9.2
+      node-gyp-build: 4.8.4
+
   troika-three-text@0.52.5(three@0.185.1):
     dependencies:
       bidi-js: 1.1.0
@@ -5488,6 +5460,8 @@ snapshots:
       graceful-fs: 4.2.11
 
   web-streams-polyfill@3.3.3: {}
+
+  web-tree-sitter@0.27.1: {}
 
   webgl-constants@1.1.1: {}
 
