@@ -216,7 +216,7 @@ const runs = {
     // [step, line (or moment within one, data-tour-moment), seconds into it, what the label says (undefined: none on the globe), the narrowest screen it shows on
     // (tour-copy.ts)]. A labelled picture waits for its label, as SwiftShader's frames can lag the tour's clock. The health
     // step's green is pictured held near the step's end.
-    const moments = [["map-stories", 2, 1.5, "a story", 601], ["map-stories", 5, 5, "a pathway: the cart needs signing in", 390],
+    const moments = [["map-stories", 2, 1.5, "a story", 601], ["map-stories", 5, 5, "a lane: the cart needs signing in", 390],
       ["map-capabilities", 1, 3.6, "a capability", 601], ["map-capabilities", 2, 1.8, "each dot is a file: server.js · 110 lines", 390],
       ["map-claims", 1, 6, "Part 2: product page, sorting, cart", 601], ["map-claims", 3, 1.2, undefined, 0],
       ["map-health", 2, 3, "not proved yet", 0], ["map-health", 2, 0, "tests passed", 0, "held"]];

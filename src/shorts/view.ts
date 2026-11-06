@@ -45,10 +45,10 @@ const drawn = scene.islands.find(each => each.story === WISHLIST.story);
 if (!drawn?.land) throw new Error("The forest drew no island for the wishlist");
 const island = drawn as typeof drawn & { land: { territories: Part[] } };
 
-/** The saved shop as the short draws it: its own islands and roads as saved, and the wishlist's island where the forest drew it,
- * with a road from each of its parts to what it builds on. */
-const roads = (scene.links ?? []).filter(link => mine.has(link.from));
-export const snapshot = { ...shop, scene: { islands: [...shop.scene.islands, island], links: [...(shop.scene.links ?? []), ...roads] },
+/** The saved shop as the short draws it: its own islands and links as saved, and the wishlist's island where the forest drew it,
+ * with a link from each of its parts to what it builds on (a lane on a selection; no road crosses the sea, ADR-1261). */
+const builtOn = (scene.links ?? []).filter(link => mine.has(link.from));
+export const snapshot = { ...shop, scene: { islands: [...shop.scene.islands, island], links: [...(shop.scene.links ?? []), ...builtOn] },
   places: [...shop.places, { id: WISHLIST.story, title: WISHLIST.title, reported: "not-checked", place: WISHLIST.place, at: { x: 1.5, y: -2 }, dependsOn: [] }] };
 export const places = new Map(snapshot.places.map(place => [place.id, place.place]));
 const number = (title: string) => Number(/^(\d+)/.exec(title)?.[1] ?? Infinity);
@@ -86,8 +86,8 @@ export type Aim = keyof typeof MAP.aims;
 
 /** The short's palette for the map: the forest's drawing, shrunk to the screen, is put into these colours, so it is pixel art
  * with hard edges like everything around it: the void past the sheet, the glass in three tones (its far side, its lit middle,
- * its lit rim), the roads in three beiges (so a thin road shrunk into the glass stays a road), the land's greens and the grey of
- * land not yet built, the yellow of land that asks for attention, and the selection's gold. */
+ * its lit rim), the roads inside each island in three beiges (so a thin road shrunk into the glass stays a road), the land's
+ * greens and the grey of land not yet built, the yellow of land that asks for attention, and the selection's gold. */
 export const MAP_PALETTE = ["#101418", "#18242d", "#22343f", "#7f95a3", "#6e6248", "#a8956a", "#e6d18c", "#4f6b3e", "#6f8f55", "#95af78",
   "#c2d69a", "#5c6670", "#8a94a0", "#3fae6a", "#c9a227", "#f2d16b", "#e5534b", "#ffd34d", "#e8eef0"] as const;
 /** Puts RGBA pixels into `palette` in place: each pixel becomes the palette's nearest colour, fully opaque. */
@@ -110,7 +110,7 @@ export const quantise = quantiseInto(MAP_PALETTE);
 
 /** How the storytree side's map grows from a brand-new project: from the empty sheet, every stage of the shop's saved growth
  * (its first four stories planned, their land filling in as each pull request lands, the other four, the shop as saved), then
- * the wishlist, replayed by the forest's own growth (islands rising, roads drawing on) in `seconds`, starting `after` the cut to
+ * the wishlist, replayed by the forest's own growth (islands rising, each once what it builds on has risen) in `seconds`, starting `after` the cut to
  * the map so the empty sheet is seen first. */
 export const GROW = { after: 0.4, seconds: 4.2 } as const;
 export const GROWTH = growthPlan([...(shop.stages ?? []).map(({ id, at, scene }) => ({ id, at, scene })), { id: "wishlist", scene: snapshot.scene }],
