@@ -1,7 +1,8 @@
 /**
  * Capability 1 · Home page. The page's end (ADR-1091 D1 (4), (5)): the owner's harness line with the marks of the harnesses
  * storytree watches, then the closing call as the last thing on the page: following the build on GitHub, in the live and
- * preview builds alike, since storytree.dev has no waitlist (ADR-1166). No sticky header and no testimonials (D1).
+ * preview builds alike, since storytree.dev has no waitlist (ADR-1166), with a quieter invitation into the storytree Discord beside it.
+ * No sticky header and no testimonials (D1).
  */
 import { escapeHtml } from "./escape-html.js";
 import { harness } from "./tour-copy.js";
@@ -15,6 +16,8 @@ export const liveCall = {
   line: "Storytree is in early alpha and not ready for use yet. It’s open source, and built in the open on GitHub.",
   href: "https://github.com/storytree-ai/storytree",
   label: "Follow the build on GitHub",
+  /** The storytree Discord's permanent invite (no expiry, unlimited uses), second to GitHub. */
+  discord: { href: "https://discord.gg/vgwMjWTfaK", label: "Join the Discord" },
 };
 
 /** The harness section and the closing call, built into the page so both read without JavaScript. */
@@ -30,6 +33,6 @@ export function pageEndMarkup(): string {
     <section id="call" class="page-end call" aria-labelledby="call-title">
       <h2 id="call-title">${escapeHtml(liveCall.title)}</h2>
       <p class="call-line">${escapeHtml(liveCall.line)}</p>
-      <p class="call-do"><a id="call-action" class="call-action" href="${liveCall.href}">${escapeHtml(liveCall.label)} <span aria-hidden="true">→</span></a></p>
+      <p class="call-do"><a id="call-action" class="call-action" href="${liveCall.href}">${escapeHtml(liveCall.label)} <span aria-hidden="true">→</span></a><a class="call-discord" href="${liveCall.discord.href}">${escapeHtml(liveCall.discord.label)}</a></p>
     </section>`;
 }
