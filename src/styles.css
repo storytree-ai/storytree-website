@@ -93,7 +93,8 @@ body:not(.immersive-home) h3 { margin: 0 0 10px; font-size: 18px; font-weight: 6
 .about-copy p { font-size: 17px; line-height: 1.8; color: var(--muted); margin-bottom: 19px; }
 .about-copy .text-link { margin-top: 5px; color: var(--green); }
 .site-footer { border-top: 1px solid var(--line); padding-block: 30px 37px; display: flex; align-items: center; justify-content: space-between; gap: 28px; font-size: 11px; color: var(--muted); line-height: 1.7; }
-.site-footer > a:not(.wordmark) { gap: .3em; }
+.site-footer > a:not(.wordmark), .footer-links a { gap: .3em; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 0 24px; margin: 0; }
 .site-footer .wordmark { color: #f0f0e7; font-size: 23px; }
 .error-page { min-height: 100svh; display: flex; flex-direction: column; }
 .error-main { flex: 1; padding-block: 105px; }

@@ -277,6 +277,29 @@ test("1.14 · below the map the home, live and preview, says it works with your 
   assert.ok([...previewPage.querySelectorAll("main > section")].at(-1)!.querySelector('a[href="https://github.com/storytree-ai/storytree"]'), "the preview ends on following the build on GitHub too");
 });
 
+test("1.18 · the home page, live and preview, invites visitors to the storytree Discord from the closing call, below following the build on GitHub, and from the footer beside the source; the not-found page's footer too", async (t) => {
+  const discord = 'a[href="https://discord.gg/vgwMjWTfaK"]';
+  for (const preview of [false, true]) {
+    const output = await mkdtemp(path.join(tmpdir(), "website-discord-"));
+    t.after(() => removeTemp(output));
+    await buildWebsite(output, { preview });
+    const page = new HappyWindow().document;
+    page.write(await readFile(path.join(output, "index.html"), "utf8"));
+    const call = [...page.querySelectorAll("main > section")].at(-1)!;
+    const links = [...call.querySelectorAll("a")];
+    assert.equal(links[0]!.getAttribute("href"), "https://github.com/storytree-ai/storytree", "following the build on GitHub stays the primary action");
+    assert.equal(links[1]?.getAttribute("href"), "https://discord.gg/vgwMjWTfaK", "then the quieter Discord link");
+    assert.match(links[1]!.textContent!, /Join the Discord/);
+    assert.ok(!links[1]!.classList.contains("call-action"), "the Discord link is not dressed as the primary action");
+    assert.match(call.textContent!, /early alpha and not ready for use yet/, "the call's line is kept");
+    const footer = page.querySelector(".site-footer")!;
+    assert.ok(footer.querySelector('a[href="https://github.com/storytree-ai/storytree"]') && footer.querySelector(discord), "the footer links the source and the Discord");
+    const missing = new HappyWindow().document;
+    missing.write(await readFile(path.join(output, "404.html"), "utf8"));
+    assert.ok(missing.querySelector(`.site-footer ${discord}`), "the not-found page's footer links the Discord");
+  }
+});
+
 /** The declarations the built stylesheet gives `selector` at a viewport `width`: its own rules plus any min/max-width @media that holds there. */
 function declarationsAt(css: string, selector: string, width: number) {
   const found = new Map<string, string>();

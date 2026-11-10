@@ -17,6 +17,9 @@
 .call-do { margin:28px auto 0; }
 .call-action { display:inline-flex; align-items:center; gap:14px; min-height:48px; padding:12px 20px; border-radius:6px; background:var(--green); color:var(--ink); font-size:15px; font-weight:600; text-decoration:none; }
 .call-action:hover { background:#d0e3be; }
+.call-do { display:flex; flex-wrap:wrap; align-items:center; gap:12px 28px; }
+.call-discord { display:inline-flex; align-items:center; min-height:48px; color:var(--soft); font-size:15px; font-weight:600; }
+.call-discord:hover { color:#e1e8e1; }
 
 @media (max-width:600px) {
   .page-end { padding:44px 12px; }
